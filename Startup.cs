@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using wxapichallenge.Data;
+using wxapichallenge.Services;
 
 namespace wxapichallenge
 {
@@ -28,6 +30,10 @@ namespace wxapichallenge
         {
 
             services.AddControllers();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IServiceContext, ServiceContext>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "wxapichallenge", Version = "v1" });
