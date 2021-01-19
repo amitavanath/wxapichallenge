@@ -26,7 +26,7 @@ namespace wxapichallenge.Controllers
         
         private async Task<IActionResult> GetSortedProducts(SortResourceParameter sortResourceParameter)
         {
-            var products = await _productRepository.GetProducts();
+            var products = await _productRepository.GetProducts(sortResourceParameter);
             return Ok(products);
         }
 

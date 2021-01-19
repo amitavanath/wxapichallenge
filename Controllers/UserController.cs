@@ -18,7 +18,7 @@ namespace wxapichallenge.Controllers
         public IActionResult GetToken()
         {
             return Ok(new {
-                name = "test",
+                name = "Amitava Nath",
                 token = _config.GetValue<string>("UserToken")
             });
         }

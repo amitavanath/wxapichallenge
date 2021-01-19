@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using wxapichallenge.Data;
 using wxapichallenge.Entities;
+using wxapichallenge.Models;
+using wxapichallenge.ResourceParameters;
 
 namespace wxapichallenge.Services
 {
@@ -12,14 +15,39 @@ namespace wxapichallenge.Services
         public ProductRepository(IServiceContext context) => _context = context
             ?? throw new System.ArgumentNullException(nameof(context));
 
-        public Task<IEnumerable<Product>> GetProducts()
+        public async Task<IEnumerable<Product>> GetProducts(SortResourceParameter sortResourceParameters)
         {
-            return _context.GetProductsAsync();
+            IEnumerable<Product> gainStrings = await _context.GetProductsAsync();
+            // var gainStrings = _context.GetProductsAsync().Select(t => t.Result).ToList();
+            if(sortResourceParameters.sortOption.ToString() == "Ascending")
+            {
+                return gainStrings.ToList().OrderBy(product => product.Name);
+            }
+            else if(sortResourceParameters.sortOption.ToString() == "Descending")
+            {
+                return gainStrings.ToList().OrderByDescending(product => product.Name);
+            }
+            else if(sortResourceParameters.sortOption.ToString() == "Low")
+            {
+                return gainStrings.ToList().OrderBy(product => product.Price);
+            }
+            else if(sortResourceParameters.sortOption.ToString() == "High")
+            {
+                return gainStrings.ToList().OrderByDescending(product => product.Price);
+            }
+
+            return gainStrings;
+            
         }
 
         public Task<IEnumerable<ShopperHistory>> GetShopperHistories()
         {
             return _context.GetShopperHistoryAsync();
+        }
+
+        public Task<float> GetTrolleyTotalAsync(TrolleyItemsForPostDto trolleyItemsForPostDto)
+        {
+            return _context.GetTrolleyTotalAsync(trolleyItemsForPostDto);
         }
     }
 }
